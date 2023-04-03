@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,23 +17,21 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [QuestionController::class, 'index'])->name('index');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function (){
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/questions/create', [QuestionController::class, 'create']);
+    Route::post('/questions', [QuestionController::class, 'store']);
+    Route::get('/questions/{question}', [QuestionController::class ,'show']);
+// '/questions/{対象データのID}'にGetリクエストが来たら、questionControllerのshowメソッドを実行する
 });
+
 
 require __DIR__.'/auth.php';

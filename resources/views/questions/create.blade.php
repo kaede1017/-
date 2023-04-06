@@ -1,16 +1,12 @@
-<!DOCTYPE HTML>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <title>留学Q&A</title>
-    </head>
+<x-app-layout>
     <body>
         <h1>Blog Name</h1>
-        <form action="/questions" method="post">
+        <form action="/questions" method="POST">
             @csrf
             <div class="title">
                 <h2>Title</h2>
-                <input type="text" name="question[title]" placeholder="タイトル"/>
+                <input type="text" name="question[title]" placeholder="タイトル" value="{{ old('question.title') }}"/>
+                <p class="title__error" style="color:red">{{ $errors->first('question.title') }}</p>
             </div>
             <div class="body">
                 <h2>Body</h2>
@@ -30,4 +26,4 @@
             <a href="/">戻る</a>
         </div>
     </body>
-</html>
+</x-app-layout>

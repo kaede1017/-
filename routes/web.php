@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function (){
     Route::get('/questions/create', [QuestionController::class, 'create']);
     Route::post('/questions', [QuestionController::class, 'store']);
     Route::get('/questions/{question}', [QuestionController::class ,'show']);
+    Route::get('/questions/{question}/edit', [QuestionController::class, 'edit']);
+    Route::put('/questions/{question}', [QuestionController::class, 'update']);
+    Route::delete('/questions/{question}', [QuestionController::class,'delete']);
 // '/questions/{対象データのID}'にGetリクエストが来たら、questionControllerのshowメソッドを実行する
 });
 

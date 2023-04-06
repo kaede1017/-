@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PostRequest;
 
 class QuestionController extends Controller
 {
      public function index(Question $question)
     {
-        return view('questions/index')->with(['questions' => $question->getByLimit()]);
+        return view('questions/index')->with(['questions' => $question->getPaginateByLimit()]);
        //blade内で使う変数'questions'と設定。'questions'の中身にgetを使い、インスタンス化した$questionを代入。
     }
     
@@ -30,5 +31,21 @@ class QuestionController extends Controller
         $question->user_id = Auth::id();
         $question->fill($input)->save();
         return redirect('/questions/' . $question->id);
+    }
+    public function edit(Question $question)
+    {
+        return view('questions/edit')->with(['question' => $question]);
+    }
+    public function update(QuestionRequest $request, Question $question)
+    {
+        $input_question = $request['question'];
+        $question->fill($input_question)->save();
+    
+        return redirect('/questions/' . $question->id);
+    }
+    public function delete(Question $question)
+    {
+        $question->delete();
+        return redirect('/');
     }
 }
